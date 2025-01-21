@@ -1,153 +1,99 @@
-// // Navbar.jsx
-// import React, { useState } from 'react';
-// import { Link } from 'react-router-dom';
-// import { FiHeart, FiMessageSquare, FiBell, FiUser, FiLogOut, FiSettings, FiPackage } from 'react-icons/fi';
-// import { BiSolidStore } from 'react-icons/bi';
-// import { RiExchangeFill } from 'react-icons/ri';
-// import { toast } from 'react-hot-toast';
-// import '../styles/Navbar.css';
+import React, { useState } from 'react';
+import { FiSearch, FiChevronDown, FiHeart, FiMessageSquare, FiUser } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import '../styles/Navbar.css';
 
-// const Navbar = () => {
-//   const [showProfileMenu, setShowProfileMenu] = useState(false);
-//   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+const MainNavbar = () => {
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState('India');
   
-//   // Mock user data - replace with actual user data
-//   const user = {
-//     name: "John Doe",
-//     email: "john@example.com",
-//     avatar: "/path-to-avatar.jpg" // Replace with actual avatar path
-//   };
+  const handleLogout = () => {
+    toast.success('Logged out successfully');
+    // Add logout logic here
+  };
 
-//   const categories = [
-//     "Electronics",
-//     "Furniture",
-//     "Fashion",
-//     "Books",
-//     "Sports",
-//     "Home & Garden",
-//     "Automotive",
-//     "Others"
-//   ];
+  return (
+    <nav className="navbar">
+      <div className="navbar-container">
+        {/* Logo */}
+        <Link to="/" className="logo">
+          <img src="/api/placeholder/32/32" alt="SmartSwap" />
+        </Link>
 
-//   const handleLogout = () => {
-//     // Add logout logic here
-//     toast.success('Logged out successfully!');
-//   };
+        {/* Location Selector */}
+        <button className="location-selector">
+          <span className="location-text">{selectedLocation}</span>
+          <FiChevronDown />
+        </button>
 
-//   const handleSell = () => {
-//     // Add sell logic here
-//     toast.success('Redirecting to sell page...');
-//   };
+        {/* Search Bar */}
+        <div className="search-wrapper">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Find Cars, Mobile Phones and more..."
+              className="search-input"
+            />
+            <button className="search-btn">
+              <FiSearch />
+            </button>
+          </div>
+        </div>
 
-//   return (
-//     <nav className="navbar">
-//       <div className="navbar-left">
-//         <Link to="/" className="logo">
-//           <RiExchangeFill className="logo-icon" />
-//           <span>SwapSmart</span>
-//         </Link>
-        
-//         <div className="category-dropdown">
-//           <button 
-//             className="category-btn"
-//             onClick={() => setShowCategoryMenu(!showCategoryMenu)}
-//           >
-//             Categories
-//           </button>
-//           {showCategoryMenu && (
-//             <div className="category-menu">
-//               {categories.map((category, index) => (
-//                 <Link 
-//                   key={index} 
-//                   to={`/category/${category.toLowerCase()}`}
-//                   className="category-item"
-//                 >
-//                   {category}
-//                 </Link>
-//               ))}
-//             </div>
-//           )}
-//         </div>
-//       </div>
+        {/* Language Selector */}
+        <button className="language-selector">
+          ENGLISH
+          <FiChevronDown />
+        </button>
 
-//       <div className="navbar-center">
-//         <div className="search-container">
-//           <input 
-//             type="text" 
-//             placeholder="Search for items..."
-//             className="search-input"
-//           />
-//           <button className="search-btn">Search</button>
-//         </div>
-//       </div>
-
-//       <div className="navbar-right">
-//         <div className="nav-icons">
-//           <Link to="/wishlist" className="nav-icon">
-//             <FiHeart />
-//           </Link>
-//           <Link to="/messages" className="nav-icon">
-//             <FiMessageSquare />
-//           </Link>
-//           <Link to="/notifications" className="nav-icon">
-//             <FiBell />
-//           </Link>
-//         </div>
-
-//         <button className="sell-btn" onClick={handleSell}>
-//           <BiSolidStore className="sell-icon" />
-//           Sell
-//         </button>
-
-//         <div className="profile-container">
-//           <button 
-//             className="profile-btn"
-//             onClick={() => setShowProfileMenu(!showProfileMenu)}
-//           >
-//             <FiUser />
-//           </button>
+        {/* Profile */}
+        <div className="profile-section">
+          <button 
+            className="profile-trigger"
+            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+          >
+            <FiUser />
+            <span>Profile</span>
+          </button>
           
-//           {showProfileMenu && (
-//             <div className="profile-menu">
-//               <div className="profile-header">
-//                 <img src={user.avatar} alt="Profile" className="profile-avatar" />
-//                 <div className="profile-info">
-//                   <h4>{user.name}</h4>
-//                   <p>{user.email}</p>
-//                 </div>
-//               </div>
-//               <div className="profile-menu-items">
-//                 <Link to="/profile" className="profile-menu-item">
-//                   <FiUser />
-//                   <span>Profile</span>
-//                 </Link>
-//                 <Link to="/my-listings" className="profile-menu-item">
-//                   <FiPackage />
-//                   <span>My Listings</span>
-//                 </Link>
-//                 <Link to="/settings" className="profile-menu-item">
-//                   <FiSettings />
-//                   <span>Settings</span>
-//                 </Link>
-//                 <button onClick={handleLogout} className="profile-menu-item logout">
-//                   <FiLogOut />
-//                   <span>Logout</span>
-//                 </button>
-//               </div>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// };
+          {showProfileDropdown && (
+            <div className="profile-dropdown">
+              <div className="dropdown-header">
+                <FiUser className="header-icon" />
+                <div className="header-text">
+                  <span className="welcome-text">Welcome to SmartSwap</span>
+                  <span className="sub-text">Create an account or log in</span>
+                </div>
+              </div>
+              <div className="dropdown-content">
+                <Link to="/profile" className="dropdown-item">
+                  <FiUser />
+                  <span>My Profile</span>
+                </Link>
+                <Link to="/favorites" className="dropdown-item">
+                  <FiHeart />
+                  <span>My Favorites</span>
+                </Link>
+                <Link to="/messages" className="dropdown-item">
+                  <FiMessageSquare />
+                  <span>Messages</span>
+                </Link>
+                <button onClick={handleLogout} className="dropdown-item logout">
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
-// export default Navbar;
-function Navbar(){
-    return(
-        <>
-        <h1>hello</h1>
-        </>
-    )
-}
-export default Navbar
+        {/* Sell Button */}
+        <Link to="/sell" className="sell-button">
+          + SELL
+        </Link>
+      </div>
+    </nav>
+  );
+};
+
+export default MainNavbar;

@@ -1,17 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Navbar from './components/Navbar'
+import { BrowserRouter } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import MainNavbar from './components/Navbar';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-     <Navbar/>
-    </>
-  )
+    <BrowserRouter>
+      <MainNavbar />
+      <Toaster position="top-right" />
+      {/* Rest of your app content */}
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
