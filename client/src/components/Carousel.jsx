@@ -5,7 +5,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
-import './Carousel.css';
+import '../styles/Carousel.css';
 
 const carouselData = [
   {
