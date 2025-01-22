@@ -13,6 +13,8 @@ import {
   LogOut 
 } from 'lucide-react';
 import Register from './Register';  // Make sure this path is correct
+import Login from './Login';
+import SignUp from './SignUp';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
@@ -21,6 +23,8 @@ const Navbar = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);  // Add this state
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
 
   const categories = [
     { name: 'Electronics', icon: '📱' },
@@ -35,6 +39,28 @@ const Navbar = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setShowProfileMenu(false);
+  };
+
+  return (
+    <>
+      <nav className="navbar">
+        <div className="navbar-left">
+          <Link to="/" className="logo">
+            SmartSwap
+          </Link>
+
+  const handleLogin = (credentials) => {
+    // Handle login logic here
+    console.log('Login:', credentials);
+    setIsLoggedIn(true);
+    setShowLoginModal(false);
+  };
+
+  const handleSignUp = (userData) => {
+    // Handle signup logic here
+    console.log('SignUp:', userData);
+    setIsLoggedIn(true);
+    setShowSignUpModal(false);
   };
 
   return (
@@ -134,6 +160,17 @@ const Navbar = () => {
                 <span>Login</span>
               </Link>
               <button onClick={() => setShowRegister(true)} className="signup-button">
+              <button 
+                className="login-button"
+                onClick={() => setShowLoginModal(true)}
+              >
+                <LogIn size={20} />
+                Login
+              </button>
+              <button 
+                className="signup-button"
+                onClick={() => setShowSignUpModal(true)}
+              >
                 Sign Up
               </button>
             </div>
@@ -143,6 +180,28 @@ const Navbar = () => {
       
       {/* Add Register component here */}
       <Register isOpen={showRegister} onClose={() => setShowRegister(false)} />
+
+      {showLoginModal && (
+        <Login 
+          onClose={() => setShowLoginModal(false)}
+          onLogin={handleLogin}
+          onSignUpClick={() => {
+            setShowLoginModal(false);
+            setShowSignUpModal(true);
+          }}
+        />
+      )}
+
+      {showSignUpModal && (
+        <SignUp 
+          onClose={() => setShowSignUpModal(false)}
+          onSignUp={handleSignUp}
+          onLoginClick={() => {
+            setShowSignUpModal(false);
+            setShowLoginModal(true);
+          }}
+        />
+      )}
     </>
   );
 };
