@@ -1,9 +1,9 @@
-// App.jsx
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
-// import './App.css';
+import Carousel from './components/Carousel';
+import './App.css';
 
 const App = () => {
   return (
@@ -11,8 +11,7 @@ const App = () => {
       <div className="app">
         <Navbar />
         <main className="main-content">
-          {/* Your other content will go here */}
-          <h1>Welcome to SwapSmart</h1>
+          <Carousel />
         </main>
         
         <Toaster
@@ -21,20 +20,20 @@ const App = () => {
           toastOptions={{
             duration: 3000,
             style: {
-              background: 'var(--background-light)',
-              color: 'var(--text-primary)',
-              border: '1px solid var(--background-gray)',
+              background: '#1a1a1a',
+              color: '#ffffff',
+              border: '1px solid #333333',
             },
             success: {
               iconTheme: {
-                primary: 'var(--success)',
-                secondary: 'white',
+                primary: '#4a90e2',
+                secondary: '#ffffff',
               },
             },
             error: {
               iconTheme: {
-                primary: 'var(--error)',
-                secondary: 'white',
+                primary: '#e74c3c',
+                secondary: '#ffffff',
               },
             },
           }}
