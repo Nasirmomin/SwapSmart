@@ -12,7 +12,6 @@ import {
   Settings,
   LogOut 
 } from 'lucide-react';
-import Register from './Register';  // Make sure this path is correct
 import Login from './Login';
 import SignUp from './SignUp';
 import '../styles/Navbar.css';
@@ -22,7 +21,6 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);  // Add this state
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
 
@@ -40,14 +38,6 @@ const Navbar = () => {
     setIsLoggedIn(false);
     setShowProfileMenu(false);
   };
-
-  return (
-    <>
-      <nav className="navbar">
-        <div className="navbar-left">
-          <Link to="/" className="logo">
-            SmartSwap
-          </Link>
 
   const handleLogin = (credentials) => {
     // Handle login logic here
@@ -155,11 +145,6 @@ const Navbar = () => {
             </>
           ) : (
             <div className="auth-buttons">
-              <Link to="/login" className="login-button">
-                <LogIn size={20} />
-                <span>Login</span>
-              </Link>
-              <button onClick={() => setShowRegister(true)} className="signup-button">
               <button 
                 className="login-button"
                 onClick={() => setShowLoginModal(true)}
@@ -177,9 +162,6 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-      
-      {/* Add Register component here */}
-      <Register isOpen={showRegister} onClose={() => setShowRegister(false)} />
 
       {showLoginModal && (
         <Login 
