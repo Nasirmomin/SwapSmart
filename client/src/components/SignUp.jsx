@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/SignUp.css';
+// import '../styles/SignUp.css';
 
 const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
   const [formData, setFormData] = useState({
@@ -70,6 +70,7 @@ const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
   };
 
   return (
+    
     <div className="modal-overlay">
       <div className="modal-content">
         <button className="close-button" onClick={onClose}>
