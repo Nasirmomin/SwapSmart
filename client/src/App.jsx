@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Carousel from './components/Carousel';
+import FeaturedItemsSection from './components/FeaturedItem';
 import './App.css';
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
         <Navbar />
         <main className="main-content">
           <Carousel />
+          <FeaturedItemsSection />
         </main>
         
         <Toaster

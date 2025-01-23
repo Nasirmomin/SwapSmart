@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
-import '../styles/Auth.css';
+import '../styles/Login.css';
 
 const Login = ({ onClose, onLogin, onSignUpClick }) => {
   const [email, setEmail] = useState('');
