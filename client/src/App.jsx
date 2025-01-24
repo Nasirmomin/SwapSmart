@@ -4,18 +4,23 @@ import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Carousel from './components/Carousel';
 
-import './App.css';
+// import './App.css';
 import FeaturedItemsSection from './components/FeaturedItems';
 
 const App = () => {
   return (
     <Router>
       <div className="app">
-        <Navbar />
-        <main className="main-content">
-          <Carousel />
-          <FeaturedItemsSection/>
-        </main>
+        <div >
+          <Navbar />
+        </div>
+      <div >
+        <Carousel/>
+      </div>
+      <div>
+        <FeaturedItemsSection />
+      </div>
+        
         
         <Toaster
           position="top-center"

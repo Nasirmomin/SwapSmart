@@ -1,38 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Bell, 
-  MessageSquare, 
-  Heart, 
-  User, 
-  Search, 
-  ChevronDown, 
-  LogIn,
-  ShoppingBag,
-  Settings,
-  LogOut 
-} from 'lucide-react';
+  FaBell,
+  FaCommentDots, 
+  FaUserCircle,
+  FaSearch,
+  FaShoppingBag
+} from 'react-icons/fa';
 import Login from './Login';
 import SignUp from './SignUp';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [showDropdown, setShowDropdown] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const categories = [
-    { name: 'Electronics', icon: '📱' },
-    { name: 'Vehicles', icon: '🚗' },
-    { name: 'Furniture', icon: '🪑' },
-    { name: 'Fashion', icon: '👕' },
-    { name: 'Books', icon: '📚' },
-    { name: 'Sports', icon: '⚽' },
-    { name: 'Home Appliances', icon: '🏠' }
-  ];
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0); // Corrected from window.scrolly to window.scrollY
+    };
+  
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Trigger it once when the component mounts
+  
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -40,14 +39,12 @@ const Navbar = () => {
   };
 
   const handleLogin = (credentials) => {
-    // Handle login logic here
     console.log('Login:', credentials);
     setIsLoggedIn(true);
     setShowLoginModal(false);
   };
 
   const handleSignUp = (userData) => {
-    // Handle signup logic here
     console.log('SignUp:', userData);
     setIsLoggedIn(true);
     setShowSignUpModal(false);
@@ -55,101 +52,68 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar">
+      <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="navbar-left">
           <Link to="/" className="logo">
             SmartSwap
           </Link>
-
-          <div className="categories-dropdown">
-            <button 
-              className="dropdown-trigger"
-              onClick={() => setShowDropdown(!showDropdown)}
-              onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
-            >
-              Categories <ChevronDown size={16} />
-            </button>
-            {showDropdown && (
-              <div className="dropdown-menu">
-                {categories.map((category) => (
-                  <Link 
-                    key={category.name} 
-                    to={`/category/${category.name.toLowerCase()}`}
-                    className="dropdown-item"
-                  >
-                    <span className="category-icon">{category.icon}</span>
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
+        </div>
+        <div className="navbar-center">
+          <Link to="/">Home</Link>
+          <Link to="/categories">Categories</Link>
+          <Link to="/sell">Sell a Product</Link>
+          <Link to="/how-it-works">How It Works</Link>
+          <Link to="/about">About Us</Link>
+          <Link to="/contact">Contact Us</Link>
+        </div>
+        <div className="navbar-right">
           <div className="search-container">
             <input
               type="text"
-              placeholder="Search items..."
+              placeholder="Search product, category or seller"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-            <Search className="search-icon" size={20} />
+            <FaSearch className="search-icon" />
           </div>
-        </div>
-
-        <div className="navbar-right">
           {isLoggedIn ? (
-            <>
+            <div className="profile-container">
               <Link to="/notifications" className="nav-icon" title="Notifications">
-                <Bell size={24} />
-                <span className="notification-badge">3</span>
+                <FaBell />
               </Link>
               <Link to="/messages" className="nav-icon" title="Messages">
-                <MessageSquare size={24} />
+                <FaCommentDots />
               </Link>
-              <Link to="/wishlist" className="nav-icon" title="Wishlist">
-                <Heart size={24} />
-              </Link>
-              <Link to="/sell" className="sell-button">
-                Sell
-              </Link>
-              <div className="profile-container">
-                <button 
-                  className="profile-trigger"
-                  onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  onBlur={() => setTimeout(() => setShowProfileMenu(false), 200)}
-                >
-                  <User size={24} />
-                </button>
-                {showProfileMenu && (
-                  <div className="profile-menu">
-                    <Link to="/profile" className="profile-item">
-                      <User size={18} />
-                      Profile
-                    </Link>
-                    <Link to="/my-listings" className="profile-item">
-                      <ShoppingBag size={18} />
-                      My Listings
-                    </Link>
-                    <Link to="/settings" className="profile-item">
-                      <Settings size={18} />
-                      Settings
-                    </Link>
-                    <button onClick={handleLogout} className="profile-item logout">
-                      <LogOut size={18} />
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            </>
+              <button 
+                className="profile-trigger"
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                onBlur={() => setTimeout(() => setShowProfileMenu(false), 200)}
+              >
+                <FaUserCircle />
+              </button>
+              {showProfileMenu && (
+                <div className="profile-menu">
+                  <Link to="/profile" className="profile-item">
+                    <FaUserCircle className="menu-icon" />
+                    Profile
+                  </Link>
+                  <Link to="/my-listings" className="profile-item">
+                    <FaShoppingBag className="menu-icon" />
+                    My Listings
+                  </Link>
+                  <button onClick={handleLogout} className="profile-item logout">
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <div className="auth-buttons">
               <button 
                 className="login-button"
                 onClick={() => setShowLoginModal(true)}
               >
-                <LogIn size={20} />
                 Login
               </button>
               <button 
