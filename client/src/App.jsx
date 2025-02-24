@@ -6,6 +6,7 @@ import Carousel from './components/Carousel';
 
 import './App.css';
 import FeaturedItemsSection from './components/FeaturedItems';
+import Footer from './components/Footer';
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
             },
           }}
         />
+        <Footer/>
       </div>
     </Router>
   );
