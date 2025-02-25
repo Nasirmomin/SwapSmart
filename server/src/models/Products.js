@@ -1,9 +1,9 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const User = require('./Users.js');
-const Category = require('./Category');
-const Review = require('./Review')
-const Order = require('./Order');
+import { Sequelize, DataTypes } from 'sequelize';
+import {sequelize} from '../config/dbConnection.js';
+import User from './Users.js';
+import Category from './Categories.js';
+import Review from './Reviews.js';
+import Order from './Orders.js';
 
 const Product = sequelize.define('Product', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -18,13 +18,11 @@ const Product = sequelize.define('Product', {
     is_verified: { type: DataTypes.BOOLEAN, defaultValue: false },
 }, { timestamps: true });
 
-Product.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Product.belongsTo(Category, { foreignKey: 'category_id', onDelete: 'CASCADE' });
-Product.hasMany(Review, { foreignKey: 'product_id', onDelete: 'CASCADE' });
-Product.belongsToMany(User, { through: 'Favorites', foreignKey: 'product_id', onDelete: 'CASCADE' });
-Product.belongsToMany(Order, { through: 'Orders', foreignKey: 'product_id', onDelete: 'CASCADE' });
+// Associations
+// Product.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+// Product.belongsTo(Category, { foreignKey: 'category_id', onDelete: 'CASCADE' });
+// Product.hasMany(Review, { foreignKey: 'product_id', onDelete: 'CASCADE' });
+// Product.belongsToMany(User, { through: 'Favorites', foreignKey: 'product_id', onDelete: 'CASCADE' });
+// Product.belongsToMany(Order, { through: 'Orders', foreignKey: 'product_id', onDelete: 'CASCADE' });
 
-module.exports = Product;
-
-
-
+export default Product;

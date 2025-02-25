@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const User = require('./User');
+import { Sequelize, DataTypes } from 'sequelize';
+import {sequelize }from '../config/dbConnection.js';
+import User from './Users.js';
 
 const Message = sequelize.define('Message', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -11,8 +11,7 @@ const Message = sequelize.define('Message', {
 }, { timestamps: true });
 
 // Associations
-Message.belongsTo(User, { foreignKey: 'sender_id', onDelete: 'CASCADE' });
-Message.belongsTo(User, { foreignKey: 'receiver_id', onDelete: 'CASCADE' });
+// Message.belongsTo(User, { foreignKey: 'sender_id', onDelete: 'CASCADE' });
+// Message.belongsTo(User, { foreignKey: 'receiver_id', onDelete: 'CASCADE' });
 
-module.exports = Message;
-
+export default Message;

@@ -1,7 +1,7 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const User = require('./Users');
-const Product = require('./Product');
+import { Sequelize, DataTypes } from 'sequelize';
+import {sequelize} from '../config/dbConnection.js';
+import User from './Users.js';
+import Product from './Products.js';
 
 const Order = sequelize.define('Order', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -18,9 +18,8 @@ const Order = sequelize.define('Order', {
     delivery_status: { type: DataTypes.ENUM('Processing', 'Shipped', 'Delivered', 'Returned'), defaultValue: 'Processing' }
 }, { timestamps: true });
 
-Order.belongsTo(User, { foreignKey: 'buyer_id', onDelete: 'CASCADE' });
-Order.belongsTo(User, { foreignKey: 'seller_id', onDelete: 'CASCADE' });
-Order.belongsTo(Product, { foreignKey: 'product_id', onDelete: 'CASCADE' });
+// Order.belongsTo(User, { foreignKey: 'buyer_id', onDelete: 'CASCADE' });
+// Order.belongsTo(User, { foreignKey: 'seller_id', onDelete: 'CASCADE' });
+// Order.belongsTo(Product, { foreignKey: 'product_id', onDelete: 'CASCADE' });
 
-module.exports = Order;
-
+export default Order;

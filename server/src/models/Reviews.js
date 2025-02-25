@@ -1,7 +1,7 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const User = require('./User');
-const Product = require('./Product');
+import { Sequelize, DataTypes } from 'sequelize';
+import {sequelize} from '../config/dbConnection.js';
+import User from './Users.js';
+import Product from './Products.js';
 
 const Review = sequelize.define('Review', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -12,8 +12,7 @@ const Review = sequelize.define('Review', {
 }, { timestamps: true });
 
 // Associations
-Review.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Review.belongsTo(Product, { foreignKey: 'product_id', onDelete: 'CASCADE' });
+// Review.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+// Review.belongsTo(Product, { foreignKey: 'product_id', onDelete: 'CASCADE' });
 
-module.exports = Review;
-
+export default Review;
