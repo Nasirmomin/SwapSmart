@@ -9,6 +9,11 @@ import Blogrouter from './BlogRouter.js';
 import Subscriberrouter from './SubscriberRouter.js';
 import Favoriterouter from './FavoritesRouter.js';
 import authMiddleware from '../middleware/auth.js';
+import Couponrouter from './CouponRouter.js';
+import Wishlistrouter from './WishlistRouter.js';
+import PaymentTransactionrouter from './PaymentTransactionRouter.js';
+import ReturnRequestrouter from './ReturnRequestRouter.js';
+import Reportrouter from './ReportRouter.js';
 
 
 const router = express.Router();
@@ -23,5 +28,11 @@ router.use('/message',Messagerouter)
 router.use('/blog',Blogrouter)
 router.use('/subscriber',Subscriberrouter)
 router.use('/favorite',Favoriterouter)
+router.use('/coupon',Couponrouter)
+router.use('/wislist',Wishlistrouter)
+router.use('/payment-transaction',PaymentTransactionrouter)
+router.use('return-request',ReturnRequestrouter)
+router.use('/report',Reportrouter)
+
 
 export default router;
