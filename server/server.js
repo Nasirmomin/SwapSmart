@@ -25,7 +25,7 @@ app.use("/api", router);
 connectDB();
 
 // Sync Database with Models
-sequelize.sync({ alter: true })
+sequelize.sync({ force: true })
   .then(() => console.log(colors.green("✅ Database & Tables Synced Successfully!")))
   .catch(err => console.error(colors.red("❌ Error syncing database:"), err));
 
