@@ -1,15 +1,15 @@
-import { Sequelize, DataTypes } from 'sequelize';
-import {sequelize} from '../config/dbConnection.js';
-import Product from './Products.js';
-import Order from './Orders.js';
-import Review from './Reviews.js';
-import Message from './Messages.js';
-import Blog from './Blogs.js';
-// import Notification from './Notifications.js';
+import { Sequelize, DataTypes } from "sequelize";
+import { sequelize } from "../config/dbConnection.js";
+import Product from "./Products.js";
+import Order from "./Orders.js";
+import Review from "./Reviews.js";
+import Message from "./Messages.js";
+import Blog from "./Blogs.js";
 
-const User = sequelize.define('User', {
+const User = sequelize.define(
+  "User",
+  {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    product_id: { type: DataTypes.INTEGER, references: { model: Product, key: 'id' } },
     full_name: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, unique: true, allowNull: false },
     password: { type: DataTypes.STRING, allowNull: false },
@@ -20,19 +20,24 @@ const User = sequelize.define('User', {
     country: { type: DataTypes.STRING },
     zip_code: { type: DataTypes.STRING },
     profile_picture: { type: DataTypes.STRING },
+    role: { 
+      type: DataTypes.ENUM("admin", "customer", "seller"), 
+      defaultValue: "customer" 
+    },
+    store_name: { type: DataTypes.STRING, allowNull: true }, // Only for sellers
     is_verified: { type: DataTypes.BOOLEAN, defaultValue: false },
-}, { timestamps: true });
+    account_status: { 
+      type: DataTypes.ENUM("Active", "Suspended", "Pending"), 
+      defaultValue: "Active" 
+    },
+    last_login: { type: DataTypes.DATE, allowNull: true },
+    preferences: { type: DataTypes.JSON, allowNull: true }, // Stores user preferences
+    is_active: { type: DataTypes.BOOLEAN, defaultValue: true }, // Soft delete functionality
+    created_by: { type: DataTypes.INTEGER, allowNull: true, references: { model: "Users", key: "id" } },
+    updated_by: { type: DataTypes.INTEGER, allowNull: true, references: { model: "Users", key: "id" } },
+  },
+  { timestamps: true }
+);
 
-// User.hasMany(Product, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-// User.hasMany(Order, { foreignKey: 'buyer_id', onDelete: 'CASCADE' });
-// User.hasMany(Order, { foreignKey: 'seller_id', onDelete: 'CASCADE' });
-// User.hasMany(Review, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-// User.hasMany(Message, { foreignKey: 'sender_id', onDelete: 'CASCADE' });
-// User.hasMany(Message, { foreignKey: 'receiver_id', onDelete: 'CASCADE' });
-// User.hasMany(Blog, { foreignKey: 'author_id', onDelete: 'CASCADE' });
-// // User.hasMany(Notification, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-
-// User.belongsToMany(Product, { through: 'Favorites', foreignKey: 'user_id', onDelete: 'CASCADE' });
-// User.belongsToMany(Product, { through: 'Orders', foreignKey: 'buyer_id', onDelete: 'CASCADE' });
 
 export default User;

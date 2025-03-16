@@ -15,6 +15,11 @@ const Blog = sequelize.define('Blog', {
             len: [5, 255] // Title must be between 5 and 255 characters
         }
     },
+    slug: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false
+    },
     content: {
         type: DataTypes.TEXT,
         allowNull: false,
@@ -27,6 +32,10 @@ const Blog = sequelize.define('Blog', {
         validate: {
             isUrl: true // Ensure the image field contains a valid URL
         }
+    },
+    category: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
     status: {
         type: DataTypes.ENUM('draft', 'published'),
@@ -48,6 +57,29 @@ const Blog = sequelize.define('Blog', {
         validate: {
             min: 0 // Ensure views count is never negative
         }
+    },
+    likes_count: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        validate: {
+            min: 0
+        }
+    },
+    comments_enabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    },
+    created_by: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    updated_by: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    is_active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
     }
 }, {
     timestamps: true
