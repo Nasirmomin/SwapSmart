@@ -6,11 +6,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 import '../styles/Carousel.css';
-
+import img from './b11.jpg'
+import img2 from './b12.jpg'
+import img3 from './b13.jpg'
 const carouselData = [
   {
     id: 1,
-    image: '/images/electronics-banner.jpg',
+    image: img,
     title: 'Premium Electronics',
     description: 'Discover high-end gadgets at incredible prices',
     buttonText: 'Browse Electronics',
@@ -18,7 +20,7 @@ const carouselData = [
   },
   {
     id: 2,
-    image: '/images/fashion-banner.jpg',
+    image: img2,
     title: 'Trending Fashion',
     description: 'Shop the latest styles from top brands',
     buttonText: 'Shop Fashion',
@@ -26,7 +28,7 @@ const carouselData = [
   },
   {
     id: 3,
-    image: '/images/furniture-banner.jpg',
+    image: img3,
     title: 'Modern Furniture',
     description: 'Transform your space with elegant furniture',
     buttonText: 'View Collection',
