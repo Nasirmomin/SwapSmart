@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios'; // Import axios
 import { 
   FaBell,
   FaCommentDots, 
   FaUserCircle,
   FaSearch,
-  FaShoppingBag
+  FaShoppingBag,
+  FaChevronDown // Import dropdown icon
 } from 'react-icons/fa';
 import Login from './Login';
 import SignUp from './SignUp';
@@ -18,10 +20,27 @@ const Navbar = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [categories, setCategories] = useState([]); // State for categories
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false); // State to control dropdown visibility
+
+  // Fetch categories from database
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        // Replace with your actual API endpoint
+        const response = await axios.get('http://localhost:5006/api/category');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0); // Corrected from window.scrolly to window.scrollY
+      setIsScrolled(window.scrollY > 0);
     };
   
     window.addEventListener('scroll', handleScroll);
@@ -32,6 +51,19 @@ const Navbar = () => {
     };
   }, []);
   
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showCategoryDropdown && !event.target.closest('.category-dropdown-container')) {
+        setShowCategoryDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCategoryDropdown]);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -60,7 +92,36 @@ const Navbar = () => {
         </div>
         <div className="navbar-center">
           <Link to="/">Home</Link>
-          <Link to="/categories">Categories</Link>
+          
+          {/* Categories dropdown */}
+          <div className="category-dropdown-container">
+            <button 
+              className="category-dropdown-trigger"
+              onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+            >
+              Categories <FaChevronDown />
+            </button>
+            
+            {showCategoryDropdown && (
+              <div className="category-dropdown-menu">
+                {categories.length > 0 ? (
+                  categories.map((category) => (
+                    <Link 
+                      key={category.id} 
+                      to={`/categories/${category.id}`}
+                      className="category-item"
+                      onClick={() => setShowCategoryDropdown(false)}
+                    >
+                      {category.name}
+                    </Link>
+                  ))
+                ) : (
+                  <div className="category-item">Loading categories...</div>
+                )}
+              </div>
+            )}
+          </div>
+          
           <Link to="/sell">Sell a Product</Link>
           <Link to="/how-it-works">How It Works</Link>
           <Link to="/about">About Us</Link>

@@ -19,7 +19,7 @@ import Reportrouter from './ReportRouter.js';
 const router = express.Router();
 
 // Define route paths
-router.use('/users', userRoutes);
+router.use('/users',userRoutes);
 router.use('/product',Productrouter)
 router.use('/order',Orderrouter)
 router.use('/category',Categoryrouter)

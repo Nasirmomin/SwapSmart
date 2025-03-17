@@ -27,9 +27,9 @@ app.use('/uploads', express.static('uploads'));
 app.use("/api", router);
 
 // Sample Route
-app.get("/", (req, res) => {
-  res.send("SwapSmart Backend Running!");
-});
+// app.get("/", (req, res) => {
+//   res.send("SwapSmart Backend Running!");
+// });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -56,11 +56,11 @@ const startServer = async () => {
     await connectDB();
     
     // Sync Database with Models (consider using force: false in production)
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ alter: true });
     console.log(colors.green("✅ Database & Tables Synced Successfully!"));
     
     // Seed default data
-    await createDefaultUsers();
+    // await createDefaultUsers();
     
     // Start server
     app.listen(PORT, () => {

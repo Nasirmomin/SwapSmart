@@ -1,0 +1,316 @@
+/* SellProduct.css */
+.sell-product-container {
+    padding: 3rem 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+  }
+  
+  .sell-product-wrapper {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+    margin-top: 1rem;
+  }
+  
+  .sell-product-wrapper h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+  
+  .sell-intro {
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+  }
+  
+  /* Form Sections */
+  .form-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .form-section:last-child {
+    border-bottom: none;
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .sell-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  .form-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.9rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #fcfcfc;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+    background-color: #ffffff;
+  }
+  
+  /* Checkbox styling */
+  .checkbox-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  
+  .checkbox-group label {
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+  
+  /* Tags styling */
+  .tags-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .tag-input-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .tag-input-group input {
+    flex: 1;
+  }
+  
+  .tag-add-button {
+    padding: 0.5rem 1rem;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .tag-add-button:hover {
+    background-color: #357abf;
+  }
+  
+  .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #edf2f7;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #4a5568;
+    gap: 0.5rem;
+  }
+  
+  .tag-remove {
+    background: none;
+    border: none;
+    color: #a0aec0;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color 0.2s;
+  }
+  
+  .tag-remove:hover {
+    color: #e53e3e;
+  }
+  
+  /* Image upload styling */
+  .image-upload-container {
+    border: 2px dashed #d0d0d0;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background-color: #fcfcfc;
+  }
+  
+  .image-upload-container:hover {
+    border-color: #4a90e2;
+    background-color: #f5f9ff;
+  }
+  
+  .image-tip {
+    font-size: 0.85rem;
+    color: #95a5a6;
+    margin-top: 0.75rem;
+  }
+  
+  .image-preview {
+    margin-top: 1.25rem;
+    padding: 0.75rem;
+    background-color: #f5f9ff;
+    border-radius: 6px;
+    border: 1px solid #e6f0ff;
+  }
+  
+  .image-preview-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .image-preview-item {
+    width: 100px;
+    height: 100px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+  }
+  
+  .image-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .form-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .submit-button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 6px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 2px 10px rgba(74, 144, 226, 0.2);
+  }
+  
+  .submit-button:hover {
+    background-color: #357abf;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+  }
+  
+  .submit-button:active {
+    transform: translateY(0);
+  }
+  
+  .submit-button:disabled {
+    background-color: #b0c7e4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Add some subtle animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .sell-product-wrapper {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @media (max-width: 768px) {
+    .sell-product-wrapper {
+      padding: 1.75rem;
+    }
+    
+    .form-row {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .form-row .form-group {
+      width: 100%;
+    }
+    
+    .sell-product-container {
+      padding: 1.5rem 1rem;
+    }
+    
+    .image-preview-list {
+      justify-content: center;
+    }
+  }
+  
+  /* Add styles for validation feedback */
+  .form-group .error-message {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+  
+  .form-group input.error,
+  .form-group select.error,
+  .form-group textarea.error {
+    border-color: #e74c3c;
+  }

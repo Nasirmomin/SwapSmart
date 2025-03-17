@@ -4,7 +4,7 @@ import { registerUser, loginUser, getAllUsers, updateUser, deleteUser } from '..
 const router = express.Router();
 
 // Register route
-router.post('/register', registerUser);
+router.post('/sign', registerUser);
 
 // Login route
 router.post('/login', loginUser);

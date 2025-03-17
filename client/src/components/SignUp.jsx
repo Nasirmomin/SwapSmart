@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../styles/SignUp.css';
 
 const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
   const [formData, setFormData] = useState({
-    fullName: '',
+    full_name: '',
     email: '',
     password: '',
     confirmPassword: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    country: '',
+    zip_code: '',
     termsAccepted: false
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -24,8 +33,8 @@ const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
     const newErrors = {};
 
     // Name validation
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full name is required';
+    if (!formData.full_name.trim()) {
+      newErrors.full_name = 'Full name is required';
     }
 
     // Email validation
@@ -48,6 +57,40 @@ const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
       newErrors.confirmPassword = 'Passwords do not match';
     }
 
+    // Phone validation
+    if (!formData.phone) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^\+?[0-9\s\-()]+$/.test(formData.phone)) {
+      newErrors.phone = 'Invalid phone number';
+    }
+
+    // Address validation
+    if (!formData.address.trim()) {
+      newErrors.address = 'Address is required';
+    }
+
+    // City validation
+    if (!formData.city.trim()) {
+      newErrors.city = 'City is required';
+    }
+
+    // State validation
+    if (!formData.state.trim()) {
+      newErrors.state = 'State/Province is required';
+    }
+
+    // Country validation
+    if (!formData.country.trim()) {
+      newErrors.country = 'Country is required';
+    }
+
+    // ZIP code validation
+    if (!formData.zip_code) {
+      newErrors.zip_code = 'ZIP/Postal code is required';
+    } else if (!/^[0-9a-zA-Z\s\-]+$/.test(formData.zip_code)) {
+      newErrors.zip_code = 'Invalid ZIP/Postal code';
+    }
+
     // Terms acceptance
     if (!formData.termsAccepted) {
       newErrors.termsAccepted = 'You must accept the Terms of Service';
@@ -57,79 +100,219 @@ const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError('');
+    
     if (validateForm()) {
-      onSignUp(formData);
+      setIsSubmitting(true);
+      
+      try {
+        // Create user data object to match the User model structure
+        const userData = {
+          full_name: formData.full_name,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          country: formData.country,
+          zip_code: formData.zip_code,
+          profile_picture: null, // Default null - could add image upload later
+          role: "customer" // Default role
+        };
+        
+        // Send POST request to your backend API
+        const response = await axios.post('http://localhost:5006/api/users/sign', userData);
+        
+        // Call the onSignUp function with the response data
+        onSignUp(response.data);
+        
+      } catch (error) {
+        console.error('Error registering user:', error);
+        
+        // Handle different types of errors
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          if (error.response.status === 400 && error.response.data.message === 'User already exists') {
+            setSubmitError('Email already exists. Please try a different email.');
+          } else if (error.response.data && error.response.data.message) {
+            setSubmitError(error.response.data.message);
+          } else {
+            setSubmitError('Registration failed. Please try again later.');
+          }
+        } else if (error.request) {
+          // The request was made but no response was received
+          setSubmitError('Server not responding. Please check your internet connection.');
+        } else {
+          // Something happened in setting up the request
+          setSubmitError('An error occurred. Please try again.');
+        }
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
-  const handleSocialLogin = (provider) => {
+  const handleSocialLogin = async (provider) => {
     // Placeholder for social login logic
     console.log(`Logging in with ${provider}`);
+    
+    try {
+      // This would typically redirect to OAuth provider
+      const response = await axios.get(`/api/auth/${provider.toLowerCase()}`);
+      console.log(response.data);
+    } catch (error) {
+      console.error(`Error with ${provider} login:`, error);
+    }
   };
 
   return (
-    
     <div className="modal-overlay">
       <div className="modal-content">
         <button className="close-button" onClick={onClose}>
           ✕
         </button>
-        <div className="auth-container">
-          <h2>Create Account</h2>
-          <p className="auth-subtitle">Join our community today</p>
-          <form onSubmit={handleSubmit} className="auth-form">
-            <div className="form-group">
-              <label htmlFor="fullName">Full Name</label>
-              <input
-                type="text"
-                id="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                placeholder="Enter your full name"
-                required
-              />
-              {errors.fullName && <p className="error-message">{errors.fullName}</p>}
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-                required
-              />
-              {errors.email && <p className="error-message">{errors.email}</p>}
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Create a password"
-                required
-              />
-              {errors.password && <p className="error-message">{errors.password}</p>}
-            </div>
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="Confirm your password"
-                required
-              />
-              {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
-            </div>
-            <div className="terms-checkbox">
-              <label>
+        
+        <div className="modal-scrollable">
+          <div className="auth-container">
+            <h2>Create Account</h2>
+            <p className="auth-subtitle">Join our community today</p>
+            
+            {submitError && (
+              <div className="error-banner">
+                {submitError}
+              </div>
+            )}
+            
+            <form onSubmit={handleSubmit} className="auth-form">
+              <div className="form-group">
+                <label htmlFor="full_name">Full Name</label>
+                <input
+                  type="text"
+                  id="full_name"
+                  value={formData.full_name}
+                  onChange={handleChange}
+                  placeholder="Enter your full name"
+                  required
+                />
+                {errors.full_name && <p className="error-message">{errors.full_name}</p>}
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  required
+                />
+                {errors.email && <p className="error-message">{errors.email}</p>}
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Create a password"
+                  required
+                />
+                {errors.password && <p className="error-message">{errors.password}</p>}
+              </div>
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm your password"
+                  required
+                />
+                {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
+              </div>
+              <div className="form-group">
+                <label htmlFor="phone">Phone Number</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Enter your phone number"
+                  required
+                />
+                {errors.phone && <p className="error-message">{errors.phone}</p>}
+              </div>
+              <div className="form-group">
+                <label htmlFor="address">Address</label>
+                <input
+                  type="text"
+                  id="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="Enter your address"
+                  required
+                />
+                {errors.address && <p className="error-message">{errors.address}</p>}
+              </div>
+              <div className="form-row">
+                <div className="form-group half">
+                  <label htmlFor="city">City</label>
+                  <input
+                    type="text"
+                    id="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    placeholder="City"
+                    required
+                  />
+                  {errors.city && <p className="error-message">{errors.city}</p>}
+                </div>
+                <div className="form-group half">
+                  <label htmlFor="state">State/Province</label>
+                  <input
+                    type="text"
+                    id="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    placeholder="State/Province"
+                    required
+                  />
+                  {errors.state && <p className="error-message">{errors.state}</p>}
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group half">
+                  <label htmlFor="country">Country</label>
+                  <input
+                    type="text"
+                    id="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    placeholder="Country"
+                    required
+                  />
+                  {errors.country && <p className="error-message">{errors.country}</p>}
+                </div>
+                <div className="form-group half">
+                  <label htmlFor="zip_code">ZIP/Postal Code</label>
+                  <input
+                    type="text"
+                    id="zip_code"
+                    value={formData.zip_code}
+                    onChange={handleChange}
+                    placeholder="ZIP/Postal Code"
+                    required
+                  />
+                  {errors.zip_code && <p className="error-message">{errors.zip_code}</p>}
+                </div>
+              </div>
+              <div className="terms-checkbox">
                 <input
                   type="checkbox"
                   id="termsAccepted"
@@ -137,35 +320,50 @@ const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
                   onChange={handleChange}
                   required
                 />
-                I agree to the Terms of Service and Privacy Policy
-              </label>
-              {errors.termsAccepted && <p className="error-message">{errors.termsAccepted}</p>}
+                <label htmlFor="termsAccepted">
+                  I agree to the Terms of Service and Privacy Policy
+                </label>
+                {errors.termsAccepted && <p className="error-message">{errors.termsAccepted}</p>}
+              </div>
+              <button 
+                type="submit" 
+                className="submit-button" 
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="loading-spinner"></span>
+                    Creating Account...
+                  </>
+                ) : (
+                  'Create Account'
+                )}
+              </button>
+            </form>
+            <div className="auth-divider">
+              <span>or</span>
             </div>
-            <button type="submit" className="submit-button">
-              Create Account
-            </button>
-          </form>
-          <div className="auth-divider">
-            <span>or</span>
+            <div className="social-login">
+              <button 
+                className="google-button" 
+                onClick={() => handleSocialLogin('Google')}
+                disabled={isSubmitting}
+              >
+                Continue with Google
+              </button>
+              <button 
+                className="facebook-button"
+                onClick={() => handleSocialLogin('Facebook')}
+                disabled={isSubmitting}
+              >
+                Continue with Facebook
+              </button>
+            </div>
+            <p className="switch-auth">
+              Already have an account?{' '}
+              <button onClick={onLoginClick} disabled={isSubmitting}>Login</button>
+            </p>
           </div>
-          <div className="social-login">
-            <button 
-              className="google-button" 
-              onClick={() => handleSocialLogin('Google')}
-            >
-              Continue with Google
-            </button>
-            <button 
-              className="facebook-button"
-              onClick={() => handleSocialLogin('Facebook')}
-            >
-              Continue with Facebook
-            </button>
-          </div>
-          <p className="switch-auth">
-            Already have an account?{' '}
-            <button onClick={onLoginClick}>Login</button>
-          </p>
         </div>
       </div>
     </div>
