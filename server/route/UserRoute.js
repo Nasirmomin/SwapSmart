@@ -1,6 +1,6 @@
 import express from 'express';
-import { registerUser, loginUser, getAllUsers, updateUser, deleteUser } from '../controller/user.js';
-
+import { registerUser, loginUser, getAllUsers, updateUser, deleteUser , getCurrentUser , updateCurrentUser } from '../controller/user.js';
+import authMiddleware from '../middleware/auth.js';
 const router = express.Router();
 
 // Register route
@@ -18,4 +18,7 @@ router.put('/:id', updateUser);
 // Delete user route (protected)
 router.delete('/:id', deleteUser);
 
+router.get('/profile', authMiddleware, getCurrentUser);
+
+router.put('/profile', authMiddleware, updateCurrentUser);
 export default router;

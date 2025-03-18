@@ -73,3 +73,65 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({ message: 'Something went wrong', error });
     }
 };
+
+// Get current user's profile
+export const getCurrentUser = async (req, res) => {
+    try {
+      // req.userId would come from your auth middleware after verifying the token
+      const userId = req.user;
+      
+      if (!userId) {
+        return res.status(401).json({ message: 'Authentication required' });
+      }
+      
+      const user = await User.findByPk(userId, {
+        attributes: { exclude: ['password'] } // Don't send password back to client
+      });
+      
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({ message: 'Something went wrong', error: error.message });
+    }
+  };
+  
+  // Update current user's profile
+  export const updateCurrentUser = async (req, res) => {
+    try {
+      const userId = req.user; // This should come from your authentication middleware
+      
+      if (!userId || isNaN(parseInt(userId))) {
+        return res.status(401).json({ message: 'Authentication required' });
+      }
+      
+      // If password is being updated, hash it
+      if (req.body.password) {
+        const salt = await bcrypt.genSalt(10);
+        req.body.password = await bcrypt.hash(req.body.password, salt);
+      }
+      
+      // Don't include the ID in the update payload
+      const { id, ...updateData } = req.body;
+      
+      const [updated] = await User.update(updateData, {
+        where: { id: userId }
+      });
+      
+      if (updated === 0) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      // Get the updated user data to return
+      const updatedUser = await User.findByPk(userId, {
+        attributes: { exclude: ['password'] }
+      });
+      
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error('Update user error:', error);
+      res.status(500).json({ message: 'Something went wrong', error });
+    }
+  };

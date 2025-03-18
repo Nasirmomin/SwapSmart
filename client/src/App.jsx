@@ -6,7 +6,7 @@ import Carousel from './components/Carousel';
 import FeaturedItemsSection from './components/FeaturedItems';
 import Footer from './components/Footer';
 import SellProduct from './components/SellProduct'; // Import the SellProduct component
-import Profile from './components/Profile';
+import Profile from './components/Profile.jsx';
 const App = () => {
   return (
     <Router>
