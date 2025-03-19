@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { X } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../styles/SignUp.css';
 
 const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
@@ -20,6 +22,7 @@ const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -126,8 +129,20 @@ const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
         // Send POST request to your backend API
         const response = await axios.post('http://localhost:5006/api/users/sign', userData);
         
+        // Store the token with proper Bearer format
+        if (response.data.token) {
+          localStorage.setItem('authToken', `Bearer ${response.data.token}`);
+          
+          // Also set it as the default header for future requests
+          axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+        }
+        
         // Call the onSignUp function with the response data
-        onSignUp(response.data);
+        onSignUp(response.data.user);
+        
+        // Close signup modal and open login modal
+        onClose();
+        onLoginClick();
         
       } catch (error) {
         console.error('Error registering user:', error);
@@ -156,24 +171,11 @@ const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
     }
   };
 
-  const handleSocialLogin = async (provider) => {
-    // Placeholder for social login logic
-    console.log(`Logging in with ${provider}`);
-    
-    try {
-      // This would typically redirect to OAuth provider
-      const response = await axios.get(`/api/auth/${provider.toLowerCase()}`);
-      console.log(response.data);
-    } catch (error) {
-      console.error(`Error with ${provider} login:`, error);
-    }
-  };
-
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <button className="close-button" onClick={onClose}>
-          ✕
+          <X size={24} />
         </button>
         
         <div className="modal-scrollable">
@@ -344,18 +346,10 @@ const SignUp = ({ onClose, onSignUp, onLoginClick }) => {
               <span>or</span>
             </div>
             <div className="social-login">
-              <button 
-                className="google-button" 
-                onClick={() => handleSocialLogin('Google')}
-                disabled={isSubmitting}
-              >
+              <button className="google-button" disabled={isSubmitting}>
                 Continue with Google
               </button>
-              <button 
-                className="facebook-button"
-                onClick={() => handleSocialLogin('Facebook')}
-                disabled={isSubmitting}
-              >
+              <button className="facebook-button" disabled={isSubmitting}>
                 Continue with Facebook
               </button>
             </div>

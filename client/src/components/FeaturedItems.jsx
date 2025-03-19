@@ -76,7 +76,7 @@ const FeaturedItemsSection = () => {
         return;
       }
 
-      await axios.post('http://localhost:5006/api/wishlist/add', 
+      await axios.post('http://localhost:5006/api/wishlist', 
         { item_id: itemId }, 
         { headers: { Authorization: `Bearer ${token}` }}
       );

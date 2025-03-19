@@ -5,7 +5,7 @@ import User from './Users.js'; // Assuming user management is available
 const Subscriber = sequelize.define(
     'Subscriber',
     {
-        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         email: { type: DataTypes.STRING, unique: true, allowNull: false },
         subscription_status: { 
             type: DataTypes.ENUM('Subscribed', 'Unsubscribed', 'Pending'), 

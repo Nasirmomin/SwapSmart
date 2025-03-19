@@ -103,7 +103,7 @@ export const getCurrentUser = async (req, res) => {
     try {
       const userId = req.user; // This should come from your authentication middleware
       
-      if (!userId || isNaN(parseInt(userId))) {
+      if (!userId) {
         return res.status(401).json({ message: 'Authentication required' });
       }
       

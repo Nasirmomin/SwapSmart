@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 
 const Login = ({ onClose, onLogin, onSignUpClick }) => {
@@ -8,6 +9,7 @@ const Login = ({ onClose, onLogin, onSignUpClick }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,12 +26,15 @@ const Login = ({ onClose, onLogin, onSignUpClick }) => {
       // Store token in localStorage
       localStorage.setItem('authToken', response.data.token);
       
-      // Call the onLogin callback with user data if needed
+      // Call the onLogin callback with user data
       onLogin(response.data.user);
       
+      // Close modal and redirect
+      onClose();
+      navigate('/');
     } catch (err) {
       setError(
-        err.response?.data?.message || 
+        err.response?.data?.message ||
         'An error occurred during login'
       );
     } finally {
@@ -43,12 +48,9 @@ const Login = ({ onClose, onLogin, onSignUpClick }) => {
         <button className="close-button" onClick={onClose}>
           <X size={24} />
         </button>
-        
         <h2>Welcome Back!</h2>
         <p>Login to access your account</p>
-        
         {error && <div className="error-message">{error}</div>}
-        
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -61,7 +63,6 @@ const Login = ({ onClose, onLogin, onSignUpClick }) => {
               placeholder="Enter your email"
             />
           </div>
-          
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
@@ -73,7 +74,6 @@ const Login = ({ onClose, onLogin, onSignUpClick }) => {
               placeholder="Enter your password"
             />
           </div>
-          
           <div className="form-options">
             <div className="remember-me">
               <input type="checkbox" id="remember" />
@@ -81,26 +81,22 @@ const Login = ({ onClose, onLogin, onSignUpClick }) => {
             </div>
             <a href="#forgot-password">Forgot Password?</a>
           </div>
-          
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="login-button"
             disabled={isLoading}
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-        
         <div className="divider">or</div>
-        
         <div className="social-login">
           <button className="google-button">Continue with Google</button>
           <button className="facebook-button">Continue with Facebook</button>
         </div>
-        
         <p className="signup-prompt">
           Don't have an account?{' '}
-          <a href="#signup" onClick={onSignUpClick}>Sign Up</a>
+          <button className="text-button" onClick={onSignUpClick}>Sign Up</button>
         </p>
       </div>
     </div>

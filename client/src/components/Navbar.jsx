@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios'; // Import axios
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { 
   FaBell,
   FaCommentDots, 
   FaUserCircle,
   FaSearch,
   FaShoppingBag,
-  FaChevronDown // Import dropdown icon
+  FaChevronDown
 } from 'react-icons/fa';
 import Login from './Login';
 import SignUp from './SignUp';
 import '../styles/Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn, handleLogout, handleLogin }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [categories, setCategories] = useState([]); // State for categories
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false); // State to control dropdown visibility
+  const [categories, setCategories] = useState([]);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch categories from database
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        // Replace with your actual API endpoint
         const response = await axios.get('http://localhost:5006/api/category');
         setCategories(response.data);
       } catch (error) {
@@ -38,13 +37,21 @@ const Navbar = () => {
     fetchCategories();
   }, []);
 
+  // Check auth token on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = token;
+    }
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
   
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Trigger it once when the component mounts
+    handleScroll();
   
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -57,29 +64,53 @@ const Navbar = () => {
       if (showCategoryDropdown && !event.target.closest('.category-dropdown-container')) {
         setShowCategoryDropdown(false);
       }
+      
+      if (showProfileMenu && !event.target.closest('.profile-container')) {
+        setShowProfileMenu(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showCategoryDropdown]);
+  }, [showCategoryDropdown, showProfileMenu]);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const onLogout = () => {
+    // Remove the auth token when logging out
+    localStorage.removeItem('authToken');
+    delete axios.defaults.headers.common['Authorization'];
+    
+    handleLogout();
     setShowProfileMenu(false);
+    navigate('/');
   };
 
-  const handleLogin = (credentials) => {
-    console.log('Login:', credentials);
-    setIsLoggedIn(true);
+  const onLogin = (userData) => {
+    handleLogin(userData);
     setShowLoginModal(false);
   };
 
-  const handleSignUp = (userData) => {
-    console.log('SignUp:', userData);
-    setIsLoggedIn(true);
+  const onSignUp = (userData) => {
+    handleLogin(userData);
     setShowSignUpModal(false);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  const handleProfileClick = () => {
+    setShowProfileMenu(false);
+    
+    // Make sure the token is set in authorization header
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = token;
+    }
   };
 
   return (
@@ -128,7 +159,7 @@ const Navbar = () => {
           <Link to="/contact">Contact Us</Link>
         </div>
         <div className="navbar-right">
-          <div className="search-container">
+          <form className="search-container" onSubmit={handleSearch}>
             <input
               type="text"
               placeholder="Search product, category or seller"
@@ -136,8 +167,11 @@ const Navbar = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-            <FaSearch className="search-icon" />
-          </div>
+            <button type="submit" className="search-button">
+              <FaSearch className="search-icon" />
+            </button>
+          </form>
+          
           {isLoggedIn ? (
             <div className="profile-container">
               <Link to="/notifications" className="nav-icon" title="Notifications">
@@ -149,21 +183,20 @@ const Navbar = () => {
               <button 
                 className="profile-trigger"
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                onBlur={() => setTimeout(() => setShowProfileMenu(false), 200)}
               >
                 <FaUserCircle />
               </button>
               {showProfileMenu && (
                 <div className="profile-menu">
-                  <Link to="/profile" className="profile-item">
+                  <Link to="/profile" className="profile-item" onClick={handleProfileClick}>
                     <FaUserCircle className="menu-icon" />
                     Profile
                   </Link>
-                  <Link to="/my-listings" className="profile-item">
+                  <Link to="/my-listings" className="profile-item" onClick={() => setShowProfileMenu(false)}>
                     <FaShoppingBag className="menu-icon" />
                     My Listings
                   </Link>
-                  <button onClick={handleLogout} className="profile-item logout">
+                  <button onClick={onLogout} className="profile-item logout">
                     Logout
                   </button>
                 </div>
@@ -191,7 +224,7 @@ const Navbar = () => {
       {showLoginModal && (
         <Login 
           onClose={() => setShowLoginModal(false)}
-          onLogin={handleLogin}
+          onLogin={onLogin}
           onSignUpClick={() => {
             setShowLoginModal(false);
             setShowSignUpModal(true);
@@ -202,7 +235,7 @@ const Navbar = () => {
       {showSignUpModal && (
         <SignUp 
           onClose={() => setShowSignUpModal(false)}
-          onSignUp={handleSignUp}
+          onSignUp={onSignUp}
           onLoginClick={() => {
             setShowSignUpModal(false);
             setShowLoginModal(true);

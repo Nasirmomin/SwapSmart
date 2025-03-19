@@ -56,7 +56,7 @@ const startServer = async () => {
     await connectDB();
     
     // Sync Database with Models (consider using force: false in production)
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log(colors.green("✅ Database & Tables Synced Successfully!"));
     
     // Seed default data

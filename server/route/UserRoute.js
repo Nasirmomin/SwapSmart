@@ -13,7 +13,7 @@ router.post('/login', loginUser);
 router.get('/',  getAllUsers);
 
 // Update user route (protected)
-router.put('/:id', updateUser);
+// router.put('/:id', updateUser);
 
 // Delete user route (protected)
 router.delete('/:id', deleteUser);
